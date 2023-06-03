@@ -1,0 +1,4 @@
+#!/bin/sh
+man $1 | col -bx | sed -n 4p
+
+

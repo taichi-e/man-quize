@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+#
+# A quiz program that uses the command descriptions displayed by the man command.
+# Copyright (c) 2022, Taichi Emi.
+# All rights reserved.
+#
+
+import os
+import random
+import subprocess
+import re
+ 
+
+def main():
+
+    """Randomly select a command from the box that will be the correct answer."""
+    path = '/usr/bin/' 
+    cmd_list = os.listdir(path)
+    # cmd_list=["ls", "mv", "cp", "cat", "rsync", "sudo", "vim", "emacs", "mupdf", "head", "tail", "touch", "cd", "mkdir"]
+    
+    selected_cmd = random.choice(cmd_list)
+
+    """Get manual of selected command."""    
+    process = subprocess.Popen(['man2line', selected_cmd], stdout=subprocess.PIPE)
+    output = process.stdout.read().decode('utf-8')
+
+    """Get manual of selected command."""    
+    splited_man = output.split('-')
+    splited_man[0] = "XXX"
+    man_with_noize = splited_man[0] + ' - ' + splited_man[1]
+    print(man_with_noize)
+        
+
+    correct_ans = selected_cmd
+    ans = ""
+    incorrect_counter = 0
+    correct_flag=False
+    for i in range(3):
+        ans = input('Enter your answer:')
+        if ans == correct_ans:
+            break
+        else:
+            print(f'\n-----  Your answer is incorrect.  -----\n')
+            incorrect_counter+=1
+                
+    if incorrect_counter == 3:
+        print(f'You failed...')
+        print(f'The answer is {selected_cmd}.')
+    else:
+        print(f'\nCongratulation!!!\n')
+        
+
+if __name__ == "__main__":
+    main()
